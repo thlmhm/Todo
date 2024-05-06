@@ -1,3 +1,5 @@
+import { generateApi } from '~/utils/api';
+
 const authAPI = {
     login: (data, params) => {
         return generateApi('post', '/auth/login', params, data);

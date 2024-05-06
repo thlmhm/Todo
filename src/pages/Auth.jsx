@@ -8,6 +8,7 @@ import { styled } from 'styled-components';
 import { useEffect, useState } from 'react';
 import FormForgotPassword from '~/components/forms/FormForgotPassword';
 import FormVerifyCode from '~/components/forms/FormVerifyCode';
+import FormRegister from '~/components/forms/FormRegister';
 const StyledCard = styled(Row)`
     background-color: #fff;
     border-radius: 1rem;
@@ -36,7 +37,8 @@ const FormWrapper = styled.div`
     z-index: 5;
 
     @media (min-width: 576px) {
-        transform: ${({ action }) => (action === 'login' ? 'translateX(0)' : 'translateX(calc(100% + 2rem))')};
+        transform: ${({ action }) =>
+            action === 'login' || action === 'register' ? 'translateX(0)' : 'translateX(calc(100% + 2rem))'};
         transition: transform 0.5s;
     }
 `;
@@ -48,13 +50,13 @@ const SideBackground = styled(Col)`
     border-radius: 1rem;
 `;
 const Auth = () => {
-    const [hide, setHide] = useState(true);
+    const [hide, setHide] = useState(1);
     const [verifyForm, setVerifyForm] = useState(false);
     const navigate = useNavigate();
     const { action = 'login' } = useParams();
 
     useEffect(() => {
-        const timer = setTimeout(() => setHide(false), 500);
+        const timer = setTimeout(() => setHide(0), 500);
 
         return () => {
             clearTimeout(timer);
@@ -62,6 +64,7 @@ const Auth = () => {
     }, []);
 
     const forgotPasswordNavigator = () => navigate('/auth/forgot-password');
+    const navigatorRegister = () => navigate('/auth/register');
     const loginNavigator = () => navigate('/auth/login');
     const showVerifyForm = () => setVerifyForm(true);
     const hideVerifyForm = () => setVerifyForm(false);
@@ -72,7 +75,13 @@ const Auth = () => {
                     {action === 'login' && (
                         <>
                             <Title level={2}>Đăng nhập</Title>
-                            <FormLogin navigator={forgotPasswordNavigator} />
+                            <FormLogin navigator={forgotPasswordNavigator} navigatorRegister={navigatorRegister} />
+                        </>
+                    )}
+                    {action === 'register' && (
+                        <>
+                            <Title level={2}>Đăng ký</Title>
+                            <FormRegister navigator={loginNavigator} showVerifyForm={showVerifyForm} />
                         </>
                     )}
                     {action === 'forgot-password' && !verifyForm && (

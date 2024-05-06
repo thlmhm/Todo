@@ -2,7 +2,8 @@ import _ from 'lodash';
 import { createContext, useEffect, useState } from 'react';
 import authAPI from '~/api/request/auth';
 import AntdSwal from '~/custom/AntSwal';
-import { getJwtData, setJwtToken } from '~/utils/token';
+import { apiCaller } from '~/utils/api';
+import { getJwtData, removeJwtToken, setJwtToken } from '~/utils/token';
 
 const AuthContext = createContext({
     isLoggedIn: false,
@@ -26,17 +27,19 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const login = async (data) => {
-        await apiCaller(authAPI.login(data), (resData) => {
-            const accessToken = resData?.data?.token;
-            setJwtToken(accessToken);
-            const userData = getJwtData();
+        // await apiCaller(authAPI.login(data), (resData) => {
+        //     const accessToken = resData?.data?.token;
+        //     setJwtToken(accessToken);
+        //     const userData = getJwtData();
 
-            if (!_.isEmpty(userData)) {
-                setIsLoggedIn(true);
-                setUser(userData);
-                AntdSwal.fire('Thành công', 'Bạn đã đăng nhập thành công', 'Success');
-            }
-        });
+        //     if (!_.isEmpty(userData)) {
+        //         setIsLoggedIn(true);
+        //         setUser(userData);
+        //         AntdSwal.fire('Thành công', 'Bạn đã đăng nhập thành công', 'Success');
+        //     }
+        // });
+        setIsLoggedIn(true);
+        console.log(data);
     };
 
     const logout = async () => {
